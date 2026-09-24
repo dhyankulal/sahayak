@@ -1,0 +1,7 @@
+django>=5.0
+supabase
+python-dotenv
+python-docx
+Pillow
+gunicorn
+whitenoise

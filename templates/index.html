@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Report & Volunteer Certificate System</title>
+    <!-- Google Fonts & FontAwesome icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .paper-container {
+            width: 100%;
+            max-width: 860px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            padding: 3.5rem;
+            position: relative;
+        }
+
+        /* Navigation Bar Tabs */
+        .tab-nav {
+            display: flex;
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 860px;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.85rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn.active {
+            background: #ffffff;
+            color: #0f172a;
+            border-color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Header Layout */
+        .header-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px dashed #cbd5e1;
+            padding-bottom: 1.5rem;
+        }
+
+        .header-logo {
+            width: 85px;
+            height: 85px;
+            object-fit: contain;
+            margin-bottom: 0.75rem;
+        }
+
+        .main-header {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+
+        .sub-header {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #dc2626;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .section-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .complaint-section-header {
+            color: #1e3a8a;
+            border-bottom-color: #1e3a8a;
+        }
+
+        /* Grid Layout */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem 1.75rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-bottom: 2px solid #0f172a;
+            border-radius: 4px;
+            padding: 0.65rem 0.85rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #0f172a;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            outline: none;
+            background: #ffffff;
+            border-color: #0f172a;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 2.5rem;
+            padding: 1.1rem;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .submit-btn:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        }
+
+        .complaint-btn {
+            background: #1e3a8a;
+        }
+
+        .complaint-btn:hover {
+            background: #1e293b;
+        }
+
+        /* External Supabase Fetcher Styles */
+        .external-badge {
+            display: inline-block;
+            background: #0284c7;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .results-box {
+            margin-top: 1.5rem;
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 350px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            display: none;
+        }
+
+        @media (max-width: 640px) {
+            .tab-nav {
+                flex-direction: column;
+            }
+            .meta-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            .paper-container {
+                padding: 1.75rem;
+            }
+            .main-header {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+        <button class="tab-btn active" id="btn-volunteer" onclick="switchTab('volunteer-report-tab', this)">
+            <i class="fa-solid fa-award"></i> Police Incident & Volunteer Certificate
+        </button>
+        <button class="tab-btn" id="btn-complaint" onclick="switchTab('complaint-report-tab', this)">
+            <i class="fa-solid fa-file-shield"></i> Sample Police Complaint Report
+        </button>
+        <button class="tab-btn" onclick="switchTab('external-supabase-tab', this)">
+            <i class="fa-solid fa-database"></i> External Supabase Reader
+        </button>
+    </div>
+
+    <!-- TAB 1: Police Incident & Volunteer Certificate Generator -->
+    <div id="volunteer-report-tab" class="tab-content active paper-container">
+        
+        <div class="header-brand">
+            <svg class="header-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="46" fill="#FACC15" stroke="#1E3A8A" stroke-width="4"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#1E3A8A" stroke-width="2" stroke-dasharray="4 2"/>
+                <path d="M50 20 L56 35 L72 35 L59 45 L64 60 L50 50 L36 60 L41 45 L28 35 L44 35 Z" fill="#1E3A8A"/>
+                <text x="50" y="80" font-size="9" font-weight="bold" fill="#1E3A8A" text-anchor="middle">GOVT OF KARNATAKA</text>
+            </svg>
+            <h1 class="main-header">POLICE INCIDENT REPORT</h1>
+            <p style="font-size: 0.9rem; color: #64748b; font-weight: 500;">Includes Police Incident Details & Volunteer Assistance Certificate</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="volunteer">
+
+            <h2 class="section-header"><i class="fa-solid fa-users-line"></i> Person(s) Involved</h2>
+            <div class="meta-grid">
+                <div class="form-group">
+                    <label for="{{ volunteer_form.case_number.id_for_label }}">Case Number:</label>
+                    {{ volunteer_form.case_number }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ volunteer_form.age_of_person.id_for_label }}">Age of Person:</label>
+                    {{ volunteer_form.age_of_person }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ volunteer_form.phone_number.id_for_label }}">Contact Phone:</label>
+                    {{ volunteer_form.phone_number }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ volunteer_form.police_name.id_for_label }}">Police Officer Name:</label>
+                    {{ volunteer_form.police_name }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ volunteer_form.volunteer_name.id_for_label }}">Volunteer Name:</label>
+                    {{ volunteer_form.volunteer_name }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ volunteer_form.address.id_for_label }}">Address:</label>
+                    {{ volunteer_form.address }}
+                </div>
+            </div>
+
+            <h2 class="section-header"><i class="fa-solid fa-file-circle-exclamation"></i> Incident Details & Actions</h2>
+            <div class="meta-grid">
+                <div class="form-group full-width">
+                    <label for="{{ volunteer_form.type_of_case.id_for_label }}">Type of Case / Incident:</label>
+                    {{ volunteer_form.type_of_case }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ volunteer_form.type_of_help_needed.id_for_label }}">What Type of Help Needed / Details of Event:</label>
+                    {{ volunteer_form.type_of_help_needed }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ volunteer_form.actions_taken.id_for_label }}">Actions Taken:</label>
+                    {{ volunteer_form.actions_taken }}
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fa-solid fa-file-word"></i> Generate Volunteer Certificate Report (.docx)
+            </button>
+        </form>
+    </div>
+
+    <!-- TAB 2: Sample Police Complaint Report (FIR Style) Generator -->
+    <div id="complaint-report-tab" class="tab-content paper-container">
+        
+        <div class="header-brand">
+            <svg class="header-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="46" fill="#FACC15" stroke="#1E3A8A" stroke-width="4"/>
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#1E3A8A" stroke-width="2" stroke-dasharray="4 2"/>
+                <path d="M50 20 L56 35 L72 35 L59 45 L64 60 L50 50 L36 60 L41 45 L28 35 L44 35 Z" fill="#1E3A8A"/>
+                <text x="50" y="80" font-size="9" font-weight="bold" fill="#1E3A8A" text-anchor="middle">GOVT OF KARNATAKA</text>
+            </svg>
+            <h1 class="main-header" style="color: #1e3a8a;">SAMPLE POLICE COMPLAINT REPORT</h1>
+            <span class="sub-header">FOR PRACTICE / DEMONSTRATION ONLY — NOT AN OFFICIAL POLICE DOCUMENT</span>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="complaint">
+
+            <div class="meta-grid">
+                <div class="form-group">
+                    <label for="{{ complaint_form.police_station.id_for_label }}">Police Station:</label>
+                    {{ complaint_form.police_station }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.district.id_for_label }}">District:</label>
+                    {{ complaint_form.district }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.state.id_for_label }}">State:</label>
+                    {{ complaint_form.state }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.date_of_complaint.id_for_label }}">Date of Complaint:</label>
+                    {{ complaint_form.date_of_complaint }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.time_of_complaint.id_for_label }}">Time:</label>
+                    {{ complaint_form.time_of_complaint }}
+                </div>
+            </div>
+
+            <h2 class="section-header complaint-section-header"><i class="fa-solid fa-user"></i> 1. Complainant Details</h2>
+            <div class="meta-grid">
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.complainant_name.id_for_label }}">Name:</label>
+                    {{ complaint_form.complainant_name }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.complainant_age.id_for_label }}">Age:</label>
+                    {{ complaint_form.complainant_age }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.complainant_gender.id_for_label }}">Gender:</label>
+                    {{ complaint_form.complainant_gender }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.complainant_address.id_for_label }}">Address:</label>
+                    {{ complaint_form.complainant_address }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.complainant_mobile.id_for_label }}">Mobile Number:</label>
+                    {{ complaint_form.complainant_mobile }}
+                </div>
+            </div>
+
+            <h2 class="section-header complaint-section-header"><i class="fa-solid fa-file-lines"></i> 2. Details of the Complaint</h2>
+            <div class="meta-grid">
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.subject.id_for_label }}">Subject (Complaint regarding):</label>
+                    {{ complaint_form.subject }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.date_of_incident.id_for_label }}">Date of Incident:</label>
+                    {{ complaint_form.date_of_incident }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.approx_time.id_for_label }}">Approximate Time:</label>
+                    {{ complaint_form.approx_time }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.place_of_incident.id_for_label }}">Place of Incident:</label>
+                    {{ complaint_form.place_of_incident }}
+                </div>
+            </div>
+
+            <h2 class="section-header complaint-section-header"><i class="fa-solid fa-pen-to-square"></i> 3. Description of Incident</h2>
+            <div class="meta-grid">
+                <div class="form-group">
+                    <label for="{{ complaint_form.location_at_time.id_for_label }}">Location at Time of Incident:</label>
+                    {{ complaint_form.location_at_time }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.time_of_occurrence.id_for_label }}">Time of Occurrence:</label>
+                    {{ complaint_form.time_of_occurrence }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.incident_description.id_for_label }}">Incident Details:</label>
+                    {{ complaint_form.incident_description }}
+                </div>
+            </div>
+
+            <h2 class="section-header complaint-section-header"><i class="fa-solid fa-user-ninja"></i> 4. Accused / Suspect Details</h2>
+            <div class="meta-grid">
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.accused_name.id_for_label }}">Name (if known):</label>
+                    {{ complaint_form.accused_name }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.accused_address.id_for_label }}">Address (if known):</label>
+                    {{ complaint_form.accused_address }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.accused_description.id_for_label }}">Description / Identification:</label>
+                    {{ complaint_form.accused_description }}
+                </div>
+            </div>
+
+            <h2 class="section-header complaint-section-header"><i class="fa-solid fa-users"></i> 5. Witness Details</h2>
+            <div class="meta-grid">
+                <div class="form-group">
+                    <label for="{{ complaint_form.witness1_name.id_for_label }}">Witness 1 Name:</label>
+                    {{ complaint_form.witness1_name }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.witness1_contact.id_for_label }}">Witness 1 Contact:</label>
+                    {{ complaint_form.witness1_contact }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.witness2_name.id_for_label }}">Witness 2 Name:</label>
+                    {{ complaint_form.witness2_name }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.witness2_contact.id_for_label }}">Witness 2 Contact:</label>
+                    {{ complaint_form.witness2_contact }}
+                </div>
+            </div>
+
+            <h2 class="section-header complaint-section-header"><i class="fa-solid fa-folder-open"></i> 6. Evidence / Documents Submitted</h2>
+            <div class="meta-grid">
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.evidence_submitted.id_for_label }}">Evidence / Documents List:</label>
+                    {{ complaint_form.evidence_submitted }}
+                </div>
+            </div>
+
+            <h2 class="section-header complaint-section-header"><i class="fa-solid fa-signature"></i> 7. Complainant's Declaration</h2>
+            <div class="meta-grid">
+                <div class="form-group">
+                    <label for="{{ complaint_form.declaration_place.id_for_label }}">Place:</label>
+                    {{ complaint_form.declaration_place }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.declaration_date.id_for_label }}">Date:</label>
+                    {{ complaint_form.declaration_date }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.declaration_name.id_for_label }}">Name of Complainant:</label>
+                    {{ complaint_form.declaration_name }}
+                </div>
+            </div>
+
+            <h2 class="section-header complaint-section-header"><i class="fa-solid fa-building-shield"></i> For Police Station Use Only</h2>
+            <div class="meta-grid">
+                <div class="form-group">
+                    <label for="{{ complaint_form.police_received_by.id_for_label }}">Complaint Received By:</label>
+                    {{ complaint_form.police_received_by }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.police_rank.id_for_label }}">Rank / Designation:</label>
+                    {{ complaint_form.police_rank }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.police_date_time.id_for_label }}">Date & Time Received:</label>
+                    {{ complaint_form.police_date_time }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ complaint_form.police_diary_no.id_for_label }}">Complaint / CSR / Diary No.:</label>
+                    {{ complaint_form.police_diary_no }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ complaint_form.police_action_taken.id_for_label }}">Action Taken / Remarks:</label>
+                    {{ complaint_form.police_action_taken }}
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn complaint-btn">
+                <i class="fa-solid fa-file-word"></i> Generate Complaint Report (.docx)
+            </button>
+        </form>
+    </div>
+
+    <!-- TAB 3: Extra Feature - Fetch Information from Another Supabase -->
+    <div id="external-supabase-tab" class="tab-content paper-container">
+        <span class="external-badge"><i class="fa-solid fa-bolt"></i> Extra Feature</span>
+        <h1 class="main-header" style="font-size: 1.8rem;">External Supabase Reader</h1>
+        <p style="margin-bottom: 1.5rem; color: #64748b; font-size: 0.9rem;">
+            Connect to any secondary Supabase database instance without affecting the current system. Enter credentials below to inspect remote tables.
+        </p>
+
+        <form id="external-supabase-form" onsubmit="handleExternalFetch(event)">
+            {% csrf_token %}
+            <div class="meta-grid">
+                <div class="form-group full-width">
+                    <label for="ext_supabase_url">Enter External Supabase URL:</label>
+                    <input type="text" id="ext_supabase_url" placeholder="https://xyz.supabase.co" required>
+                </div>
+                <div class="form-group full-width">
+                    <label for="ext_supabase_key">Enter External Supabase API Key (Publishable or Service Key):</label>
+                    <input type="text" id="ext_supabase_key" placeholder="eyJhbGciOi..." required>
+                </div>
+                <div class="form-group full-width">
+                    <label for="ext_table_name">Target Table Name (Default: police_reports):</label>
+                    <input type="text" id="ext_table_name" value="police_reports" placeholder="police_reports">
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" style="background: #0284c7;">
+                <i class="fa-solid fa-cloud-arrow-down"></i> Fetch Data from External Supabase
+            </button>
+        </form>
+
+        <div id="results-box" class="results-box"></div>
+    </div>
+
+    <script>
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        async function handleExternalFetch(e) {
+            e.preventDefault();
+            const resultsBox = document.getElementById('results-box');
+            resultsBox.style.display = 'block';
+            resultsBox.textContent = 'Connecting to external Supabase...';
+
+            const url = document.getElementById('ext_supabase_url').value;
+            const key = document.getElementById('ext_supabase_key').value;
+            const tableName = document.getElementById('ext_table_name').value;
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            const formData = new FormData();
+            formData.append('supabase_url', url);
+            formData.append('supabase_key', key);
+            formData.append('table_name', tableName);
+
+            try {
+                const response = await fetch('/fetch-supabase/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.status === 'success') {
+                    resultsBox.textContent = `[SUCCESS] Retrieved ${data.count} records:\n\n` + JSON.stringify(data.data, null, 2);
+                } else {
+                    resultsBox.textContent = `[ERROR] ${data.message}`;
+                }
+            } catch (err) {
+                resultsBox.textContent = `[CONNECTION ERROR] ${err.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
